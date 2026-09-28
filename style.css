@@ -1,0 +1,145 @@
+:root {
+  --panel: rgba(12, 18, 36, 0.72);
+  --border: rgba(255, 255, 255, 0.22);
+  --text: #f4f1e8;
+  --accent: #ffd35a;
+  --hp: #e0444c;
+  --mp: #3d7cf0;
+  --exp: #f3c63f;
+  --font: "DotGothic16", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: #0b1020; color: var(--text); font-family: var(--font);
+  -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.hidden { display: none !important; }
+button { font-family: var(--font); cursor: pointer; }
+
+.panelbox { background: var(--panel); border: 2px solid var(--border); border-radius: 8px; }
+
+#hud { position: fixed; inset: 0; pointer-events: none; }
+#status { position: absolute; left: 12px; top: 12px; width: 240px; padding: 8px 10px; }
+#status .row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 16px; }
+#gold { color: var(--accent); }
+.bar { position: relative; height: 14px; background: rgba(0,0,0,.55); border-radius: 4px; margin: 4px 0; overflow: hidden; border: 1px solid rgba(255,255,255,.15); }
+.bar > div { height: 100%; width: 100%; transition: width .15s; }
+.bar span { position: absolute; inset: 0; font-size: 11px; line-height: 13px; text-align: center; text-shadow: 0 1px 2px #000; }
+.bar.hp > div { background: linear-gradient(#ff6b6b, var(--hp)); }
+.bar.mp > div { background: linear-gradient(#6fa2ff, var(--mp)); }
+.bar.exp { height: 6px; }
+.bar.exp > div { background: var(--exp); }
+
+#rightPanel { position: absolute; right: 12px; top: 12px; width: 170px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+#minimap { width: 160px; height: 160px; border-radius: 50%; border: 3px solid rgba(255,255,255,.35); background: #203020; box-shadow: 0 2px 10px rgba(0,0,0,.5); }
+#quest { width: 100%; padding: 6px 8px; font-size: 13px; line-height: 1.4; }
+#quest .qt { color: var(--accent); font-size: 12px; }
+#questDist { color: #bcd; font-size: 11px; }
+
+#boss { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: min(460px, 50vw); text-align: center; text-shadow: 0 2px 4px #000; }
+#bossName { font-size: 18px; color: #ffb0a0; }
+.bossbar { height: 16px; border: 2px solid rgba(255,255,255,.4); }
+.bossbar > div { background: linear-gradient(#ff7a3a, #b8141c); }
+
+#banner { position: absolute; top: 28%; left: 0; right: 0; text-align: center; font-size: 42px; color: var(--accent); text-shadow: 0 3px 0 #6a3b00, 0 0 20px rgba(255,200,60,.6); opacity: 0; transition: opacity .4s; }
+#banner.area { font-size: 28px; color: #fff; text-shadow: 0 2px 6px #000; }
+#banner.show { opacity: 1; }
+
+#messages { position: absolute; left: 12px; bottom: 90px; width: min(420px, 60vw); display: flex; flex-direction: column; gap: 4px; }
+#messages div { background: rgba(0,0,0,.55); padding: 4px 10px; border-radius: 4px; font-size: 14px; transition: opacity .6s; border-left: 3px solid var(--accent); }
+
+#prompt { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); background: var(--panel); border: 2px solid var(--accent); padding: 6px 16px; border-radius: 20px; font-size: 16px; animation: pulse 1.2s infinite; }
+@keyframes pulse { 50% { transform: translateX(-50%) scale(1.06); } }
+
+#skillbar { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.skill { position: relative; width: 70px; height: 56px; background: var(--panel); border: 2px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; overflow: hidden; }
+.skill b { position: absolute; left: 4px; top: 2px; color: var(--accent); font-size: 12px; }
+.skill em { font-style: normal; font-size: 15px; color: #fff; }
+.skill .cd { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: rgba(0,0,0,.65); }
+.skill.nomp { opacity: .5; }
+
+#hint { position: absolute; bottom: 78px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,.75); text-shadow: 0 1px 2px #000; white-space: nowrap; }
+.iconbtn { pointer-events: auto; position: absolute; right: 190px; top: 12px; width: 44px; height: 44px; font-size: 22px; color: #fff; background: var(--panel); border: 2px solid var(--border); border-radius: 8px; }
+
+#dmgLayer { position: absolute; inset: 0; overflow: hidden; }
+.dmg { position: absolute; left: 0; top: 0; font-size: 22px; font-weight: bold; color: #fff; text-shadow: 0 0 3px #000, 0 2px 0 #000; will-change: transform; white-space: nowrap; }
+.dmg.crit { color: #ffd35a; font-size: 30px; }
+.dmg.player { color: #ff6464; }
+.dmg.heal { color: #6dff8a; }
+.dmg.exp { color: #b9a0ff; font-size: 16px; }
+
+/* dialog */
+#dialog { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); width: min(720px, calc(100vw - 32px)); min-height: 120px; background: rgba(8, 12, 30, .9); border: 3px solid #e9e3cf; border-radius: 10px; padding: 14px 20px 18px; font-size: 19px; line-height: 1.6; cursor: pointer; z-index: 20; box-shadow: 0 6px 30px rgba(0,0,0,.6); }
+#dlgName { position: absolute; top: -18px; left: 16px; background: #e9e3cf; color: #1b2440; padding: 2px 12px; border-radius: 6px; font-size: 16px; }
+.dlgNext { position: absolute; right: 16px; bottom: 6px; animation: blink 1s infinite; color: var(--accent); }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* panel (menu / shop) */
+#panel { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 40px); overflow: auto; background: rgba(8, 12, 30, .94); border: 3px solid #e9e3cf; border-radius: 12px; padding: 18px 20px; z-index: 30; }
+#panel h2 { margin: 0 0 10px; color: var(--accent); font-weight: normal; font-size: 22px; }
+#panel h3 { margin: 14px 0 6px; font-weight: normal; font-size: 16px; color: #bcd; border-bottom: 1px solid var(--border); }
+#panel table { width: 100%; border-collapse: collapse; font-size: 15px; }
+#panel td { padding: 4px 6px; }
+.list .item { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-bottom: 1px dashed rgba(255,255,255,.12); }
+.list .item .nm { flex: 1; }
+.list .item .ds { display: block; font-size: 12px; color: #aab; }
+.list .item .pr { color: var(--accent); min-width: 60px; text-align: right; }
+.pbtn { background: #2d3b6b; color: #fff; border: 2px solid #6a7fc0; border-radius: 6px; padding: 5px 12px; font-size: 14px; }
+.pbtn:disabled { opacity: .4; cursor: default; }
+.pbtn.gold { background: #6b4f12; border-color: #d7a93a; }
+.prow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; justify-content: flex-end; }
+
+/* screens */
+.screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: radial-gradient(ellipse at center, rgba(10,20,50,.25), rgba(5,8,20,.75)); z-index: 40; text-align: center; padding: 16px; }
+.logo { font-size: clamp(34px, min(9vw, 13vh), 84px); color: #fff; letter-spacing: 4px; text-shadow: 0 4px 0 #2a4b9a, 0 8px 24px rgba(0,0,0,.6); }
+.logo span { color: var(--accent); }
+.logo.red { color: #ff7070; text-shadow: 0 4px 0 #5a1010; }
+.sub { font-size: clamp(16px, 3vw, 22px); text-shadow: 0 2px 4px #000; }
+.btns { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.btns button { width: 240px; padding: 12px; font-size: 20px; color: #fff; background: rgba(30,50,110,.85); border: 3px solid #e9e3cf; border-radius: 10px; }
+.btns button:hover:not(:disabled) { background: rgba(60,90,180,.95); }
+.btns button:disabled { opacity: .4; cursor: default; }
+.howto { max-width: 640px; font-size: 13px; line-height: 1.7; color: #dde; background: rgba(0,0,0,.4); padding: 8px 14px; border-radius: 8px; }
+.howto p { margin: 4px 0; }
+#loading { font-size: 14px; color: #aab; }
+#endStats { font-size: 16px; line-height: 1.8; background: rgba(0,0,0,.4); padding: 10px 24px; border-radius: 8px; }
+
+/* touch */
+#touch { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+#stickBase { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.35); display: none; }
+#stickKnob { position: absolute; left: 35px; top: 35px; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,.5); }
+#tbtns { position: absolute; right: calc(12px + env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); width: 230px; height: 230px; }
+.tb { pointer-events: auto; position: absolute; width: 58px; height: 58px; border-radius: 50%; background: rgba(20,30,60,.6); border: 2px solid rgba(255,255,255,.5); color: #fff; font-size: 13px; touch-action: none; }
+.tb:active, .tb.on { background: rgba(255,211,90,.55); }
+.tb.big { width: 86px; height: 86px; right: 0; bottom: 0; font-size: 34px; }
+.tb[data-act="dodge"] { right: 96px; bottom: 0; }
+.tb[data-act="jump"] { right: 0; bottom: 96px; }
+.tb[data-act="skill1"] { right: 82px; bottom: 74px; }
+.tb[data-act="skill2"] { right: 150px; bottom: 50px; }
+.tb[data-act="potion"] { right: 66px; bottom: 150px; }
+.tb.wide { width: auto; height: 48px; border-radius: 24px; padding: 0 18px; right: 230px; bottom: 8px; font-size: 16px; background: rgba(120,90,10,.8); border-color: var(--accent); white-space: nowrap; }
+
+body.touch #skillbar, body.touch #hint { display: none; }
+body.touch #prompt { display: none !important; }
+
+@media (max-width: 700px), (max-height: 500px) {
+  #status { width: 170px; padding: 6px 8px; left: 8px; top: 8px; }
+  #status .row { font-size: 13px; }
+  .bar { height: 11px; }
+  .bar span { font-size: 9px; line-height: 10px; }
+  #rightPanel { width: 120px; right: 8px; top: 8px; }
+  #minimap { width: 100px; height: 100px; }
+  #quest { font-size: 11px; }
+  .iconbtn { right: 136px; top: 8px; width: 38px; height: 38px; font-size: 18px; }
+  #messages { top: 96px; bottom: auto; width: min(360px, 48vw); }
+  #messages div { font-size: 12px; }
+  #banner { font-size: 30px; }
+  #banner.area { font-size: 20px; }
+  #boss { top: 60px; width: 60vw; }
+  #dialog { font-size: 16px; min-height: 96px; }
+  .screen { gap: 8px; }
+  .btns button { padding: 8px; font-size: 17px; }
+  .howto { font-size: 11px; line-height: 1.5; }
+}

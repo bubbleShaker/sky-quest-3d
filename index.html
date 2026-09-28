@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1b2440">
+<title>Sky Quest 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud" class="hidden">
+  <div id="status" class="panelbox">
+    <div class="row"><span id="lv">Lv 1</span><span id="gold">0 G</span></div>
+    <div class="bar hp"><div id="hpFill"></div><span id="hpText"></span></div>
+    <div class="bar mp"><div id="mpFill"></div><span id="mpText"></span></div>
+    <div class="bar exp"><div id="expFill"></div></div>
+  </div>
+  <div id="rightPanel">
+    <canvas id="minimap" width="160" height="160"></canvas>
+    <div id="quest" class="panelbox"><div class="qt">クエスト</div><div id="questText"></div><div id="questDist"></div></div>
+  </div>
+  <div id="boss" class="hidden"><div id="bossName"></div><div class="bar bossbar"><div id="bossFill"></div></div></div>
+  <div id="banner"></div>
+  <div id="messages"></div>
+  <div id="prompt" class="hidden"></div>
+  <div id="skillbar">
+    <div class="skill" id="sk-q"><b>Q</b><span>回転斬り</span><i class="cd"></i></div>
+    <div class="skill" id="sk-e"><b>E</b><span>火球</span><i class="cd"></i></div>
+    <div class="skill" id="sk-1"><b>1</b><span>ポーション</span><em id="cnt-potion">0</em></div>
+    <div class="skill" id="sk-2"><b>2</b><span>エーテル</span><em id="cnt-ether">0</em></div>
+  </div>
+  <div id="hint">クリックで視点操作 / WASD 移動 / クリック 攻撃 / I メニュー</div>
+  <button id="menuBtn" class="iconbtn" aria-label="メニュー">☰</button>
+  <div id="dmgLayer"></div>
+</div>
+
+<div id="touch" class="hidden">
+  <div id="stickBase"><div id="stickKnob"></div></div>
+  <div id="tbtns">
+    <button data-act="attack" class="tb big">⚔</button>
+    <button data-act="dodge" class="tb">回避</button>
+    <button data-act="jump" class="tb">跳ぶ</button>
+    <button data-act="skill1" class="tb">回転</button>
+    <button data-act="skill2" class="tb">火球</button>
+    <button data-act="potion" class="tb">薬</button>
+    <button data-act="interact" id="tInteract" class="tb wide hidden">話す</button>
+  </div>
+</div>
+
+<div id="dialog" class="hidden"><div id="dlgName"></div><div id="dlgText"></div><div class="dlgNext">▼</div></div>
+<div id="panel" class="hidden"></div>
+
+<div id="title" class="screen">
+  <div class="logo">SKY QUEST <span>3D</span></div>
+  <div class="sub">〜 炎竜と空の村 〜</div>
+  <div class="btns">
+    <button id="btnNew">はじめから</button>
+    <button id="btnCont">つづきから</button>
+  </div>
+  <div class="howto">
+    <p><b>PC</b>：WASD 移動 ／ マウス 視点 ／ 左クリック 攻撃 ／ 右クリック・Shift 回避 ／ Space ジャンプ<br>Q 回転斬り ／ E 火球 ／ F 話す・調べる ／ 1・2 回復 ／ I メニュー ／ M 音</p>
+    <p><b>スマホ</b>：左側ドラッグで移動 ／ 右側ドラッグで視点 ／ 画面右下のボタンで行動</p>
+  </div>
+  <div id="loading">ロード中...</div>
+</div>
+
+<div id="gameover" class="screen hidden">
+  <div class="logo red">力尽きた…</div>
+  <div class="sub">所持金の半分を失った</div>
+  <div class="btns"><button id="btnRevive">村で復活する</button></div>
+</div>
+
+<div id="ending" class="screen hidden">
+  <div class="logo">GAME CLEAR!</div>
+  <div class="sub">炎竜ヴァルガスは倒れ、空の村に平和が戻った。</div>
+  <div id="endStats"></div>
+  <div class="btns"><button id="btnFree">冒険を続ける</button></div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
