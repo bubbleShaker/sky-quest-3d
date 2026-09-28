@@ -300,7 +300,7 @@ function buildVillage(scene) {
   let i = 0;
   for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
     const x = Math.sin(a) * 17, z = Math.cos(a) * 17;
-    if (roadDist(x, z) < 6.5) continue;
+    if (roadDist(x, z) < 6.5 || z > 15) continue; // 南側はスタート地点のカメラのため空ける
     buildHouse(scene, x, z, a + Math.PI, walls[i % walls.length], roofs[i % roofs.length]);
     i++;
   }
